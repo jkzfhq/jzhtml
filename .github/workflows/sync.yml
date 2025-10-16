@@ -1,0 +1,28 @@
+# 工作流名称
+name: Sync to jzhtml_2 repository
+
+# 触发条件：当 main 分支有 push 操作时触发
+on:
+  push:
+    branches:
+      - main
+
+# 任务
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      # 第一步：把当前仓库（jzhtml）的代码下载到虚拟机
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+
+      # 第二步：把代码推送到第二个仓库（jzhtml_2）
+      - name: Push to secondary repository
+        env:
+          # 使用我们之前设置的秘密 Token
+          TOKEN: ${{ secrets.SYNC_TOKEN }}
+        run: |
+          # 这是为你量身定制的推送命令，请直接使用
+          git push https://jkzfhq:${TOKEN}@github.com/jkzfhq/jzhtml_2.git main
